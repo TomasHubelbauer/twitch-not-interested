@@ -7,14 +7,14 @@ items on the list in the DOM using CSS.
 A Twitch-native way to hide categories is to use the **Not Interested** overflow
 menu item.
 
-I am not aware of a native way to hide entire tags on Twitch.
+Twitch does not have a native way to hide entire tags, so the Unwated Twitch
+extensions needs to be relied on to hide tags even when this script is used to
+hide unwanted categories.
 
-I would like to find a way to mass-mark categories as Not Interested on Twitch
-and potentially devise a way for the Unwanted Twitch extension to mark items as
-well whenever a user hides a category.
+I present a way to mass-mark categories as Not Interested on Twitch.
 
 My motivation for this is slow performance of the Twitch tab whenever there are
-many hidden items as I hide all gaming content and keep just a handful of
+many hidden categories as I hide all gaming content and keep just a handful of
 categories I am interested in.
 
 When on the Categories page, `https://www.twitch.tv/directory`, this code gets
