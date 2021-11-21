@@ -182,7 +182,9 @@ void async function() {
       .then(response => response.text())
       .then(text => console.log(item, text))
       .catch(console.error);
-    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    // Delay between calls to avoid provoking the rate limiter just in case
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 }()
 ```
@@ -227,7 +229,15 @@ void async function() {
       .then(response => response.text())
       .then(text => console.log(item, text))
       .catch(console.error);
-    await new Promise(resolve => setTimeout(resolve, 5000));
+      
+    // Delay between calls to avoid provoking the rate limiter just in case
+    await new Promise(resolve => setTimeout(resolve, 500));
   }
 }()
 ```
+
+## Limitations
+
+Twitch does not have a native way to ban entire tags, so the Unwanted Twitch
+extensions still needs to be relied on for tag hiding. But with this script, it
+no longer needs to be used to hide categories.
