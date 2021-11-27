@@ -236,6 +236,50 @@ void async function() {
 }()
 ```
 
+## Alternative
+
+I did not realize I do not need to craft the GraphQL request, I can just click
+the DOM button after finding it relative to the poster image.
+
+```js
+// Find all poster images on the https://www.twitch.tv/directory page
+[...document.querySelectorAll('.tw-image[src*="ttv-boxart"]')]
+  // Extract ID, name, the `img` element and the "Not Interested" `button` element
+  .map(img => ({
+    // Convert the ID to a number for comparisons
+    id: +img.src.match(/\d+/)[0],
+    // Extract the name from the `alt` tag (least likely to change format)
+    name: img.alt.slice(0, -' cover image'.length),
+    // Keep the `img` element reference to be able to hover over it and debug
+    img,
+    // Find the overflow menu button (it is the only button in the query)
+    button: img.closest('a').parentNode.querySelector('button'),
+  }))
+  // Check all the results to drop unexpected data rather than cause damange
+  .filter(category => category.id && category.name && category.img && category.button)
+  // Drop categories I do not wish to remove:
+  // Just Chatting: 509658, Music: 26936, Art: 509660, Chess: 743,
+  // Retro Gaming: 27284, Makers & Crafting: 509673,
+  // Software and Game Development: 1469308723, Science & Technology: 509670
+  .filter(category =>  ![509658, 26936, 509660, 743, 27284, 509673, 1469308723, 509670].includes(category.id))
+  // Limit to a handful for a test - change or re-run the script at your leisure
+  .slice(0, 5)
+  // Open the overflow menu and click the "Not Interested" button for each item
+  .forEach(category => {
+    // Open the overflow menu to make the "Not Interested" button mount in DOM
+    category.button.click();
+    // Find the "Not Interested" `button` through the shared parent of the elements
+    const button = category.img.closest('a').parentNode.querySelector('button[data-a-target="rec-feedback-card-not-interested"]');
+    if (!button) {
+      console.log(category.id, category.name, 'Overflow button click did not reveal the "Not Interested" button');
+      return;
+    }
+    
+    button.click();
+    console.log(category.id, category.name, '"Not Interested" button clicked');
+  });
+```
+
 ## Limitations
 
 Twitch does not have a native way to ban entire tags, so the Unwanted Twitch
